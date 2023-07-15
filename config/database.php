@@ -1,7 +1,7 @@
 <?php
 
 $host = "localhost";
-$dbname = "grow";
+$dbname = "events_booking";
 $username = "root";
 $password = "";
 

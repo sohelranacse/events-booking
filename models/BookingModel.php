@@ -7,35 +7,26 @@ class BookingModel {
         $this->db = $db;
     }
 
-    public function saveBooking($booking) { // not used
-        $stmt = $this->db->prepare("INSERT INTO bookings (participation_id, employee_name, employee_mail, event_id, event_name, participation_fee, event_date, version) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([
-            $booking['participation_id'],
-            $booking['employee_name'],
-            $booking['employee_mail'],
-            $booking['event_id'],
-            $booking['event_name'],
-            $booking['participation_fee'],
-            $booking['event_date'],
-            isset($booking['version']) ? $booking['version'] : null
-        ]);
-    }
     public function saveBatchBookings($bookings) {
         try {
             $this->db->beginTransaction();
 
-            $stmt = $this->db->prepare("INSERT INTO bookings (participation_id, employee_name, employee_mail, event_id, event_name, participation_fee, event_date, version) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $bookingStmt = $this->db->prepare("INSERT INTO booking (participation_id, employee_name, employee_mail, event_id, participation_fee, event_date) VALUES (?, ?, ?, ?, ?, ?)");
+            $eventStmt = $this->db->prepare("INSERT INTO events (event_id, event_name) VALUES (?, ?)");
 
             foreach ($bookings as $booking) {
-                $stmt->execute([
+                $eventExists = $this->checkIfEventExists($booking['event_id']);
+                if (!$eventExists) {
+                    $eventStmt->execute([$booking['event_id'], $booking['event_name']]);
+                }
+
+                $bookingStmt->execute([
                     $booking['participation_id'],
                     $booking['employee_name'],
                     $booking['employee_mail'],
                     $booking['event_id'],
-                    $booking['event_name'],
                     $booking['participation_fee'],
                     $booking['event_date'],
-                    isset($booking['version']) ? $booking['version'] : null
                 ]);
             }
 
@@ -45,8 +36,13 @@ class BookingModel {
             // Handle the exception as per your requirement
         }
     }
+    private function checkIfEventExists($event_id) {
+        $stmt = $this->db->prepare("SELECT event_id FROM events WHERE event_id = ?");
+        $stmt->execute([$event_id]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
 
-    public function getFilteredBookings($filters) {
+    public function getFilteredBookings($filters = array()) {
         $where = [];
         $params = [];
 
@@ -70,7 +66,12 @@ class BookingModel {
             $whereClause = "WHERE " . implode(" AND ", $where);
         }
 
-        $stmt = $this->db->prepare("SELECT * FROM bookings $whereClause");
+        $stmt = $this->db->prepare("
+            SELECT a.*, b.event_name
+            FROM booking a
+            INNER JOIN events b ON (a.event_id = b.event_id)
+            $whereClause
+        ");
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
