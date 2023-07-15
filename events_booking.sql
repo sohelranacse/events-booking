@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 15, 2023 at 09:05 AM
+-- Generation Time: Jul 15, 2023 at 11:50 AM
 -- Server version: 5.7.31
 -- PHP Version: 7.4.26
 
@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS `booking` (
   `event_id` int(11) DEFAULT NULL,
   `participation_fee` decimal(10,2) DEFAULT NULL,
   `event_date` date DEFAULT NULL,
-  PRIMARY KEY (`participation_id`)
+  PRIMARY KEY (`participation_id`),
+  KEY `event_id` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -63,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `event_id` int(11) NOT NULL,
   `event_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`event_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `events`
@@ -73,6 +74,16 @@ INSERT INTO `events` (`event_id`, `event_name`) VALUES
 (1, 'PHP 7 crash course'),
 (2, 'International PHP Conference'),
 (3, 'code.talks');
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `booking`
+--
+ALTER TABLE `booking`
+  ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
