@@ -1,4 +1,4 @@
-# Event Booking System Integration
+# Event Booking System Integration - PHP OOP
 
 This project aims to integrate an external event booking system's JSON export file into our system. We will design a database scheme for optimized storage, read the JSON data using PHP, and create a simple web page to filter and display the bookings. Additionally, we'll calculate and display the total price of all filtered entries.
 
@@ -39,9 +39,6 @@ For optimized storage, we will design a relational database schema with the foll
 
 6. **Total Price**: Calculate the total price of all the filtered entries and add a last row in the table to display this total.
 
-## Project Structure
-
-Your project structure could look like this:
 
 
 ## How to Run
@@ -50,15 +47,7 @@ Your project structure could look like this:
 
 2. Import the provided database schema (using SQL queries or a database management tool like phpMyAdmin).
 
-3. Update the `db.php` file with your database credentials for connecting to the database.
-
-4. Implement the `import_data.php` script to read the JSON export file and save it to the database.
-
-5. Create the `index.php` file with the filtering form and the logic to query the database based on the filter criteria.
-
-6. Style the page using the `styles.css` file in the `css` folder.
-
-7. Test the application by accessing `index.php` in your web browser.
+3. Test the application by accessing `index.php` in your web browser.
 
 ## Screenshots
 
