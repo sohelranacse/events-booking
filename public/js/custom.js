@@ -16,9 +16,6 @@ $(document).ready(function() {
                 <table id="bookingTableBody" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Employee Name:</th>
-                        </tr>
-                        <tr>
                             <th>Participation ID</th>
                             <th>Employee Name</th>
                             <th>Employee Mail</th>
