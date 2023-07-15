@@ -52,3 +52,4 @@ For optimized storage, we will design a relational database schema with the foll
 ## Screenshots
 
 ![screenshot](screenshoot.png)
+![screenshot](screenshoot-db.png)
